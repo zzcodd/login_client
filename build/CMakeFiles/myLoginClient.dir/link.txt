@@ -1,1 +1,1 @@
-/usr/bin/c++ -rdynamic CMakeFiles/myLoginClient.dir/log_mysql.cc.o CMakeFiles/myLoginClient.dir/main.cc.o -o myLoginClient  -lmysqlclient 
+/usr/bin/c++ -rdynamic CMakeFiles/myLoginClient.dir/log_mysql.cc.o CMakeFiles/myLoginClient.dir/main.cc.o -o myLoginClient  -lmysqlclient -lpthread 

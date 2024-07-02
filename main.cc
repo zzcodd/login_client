@@ -6,6 +6,8 @@
 bool log_Register();
 bool log_Login();
 bool log_Logout();
+bool change_UserName();
+bool change_Passwd();
 
 Log_Mysql my;
 
@@ -24,6 +26,8 @@ int main() {
     std::cout << "1-注册  " <<std::endl 
         << "2-登录  " << std::endl
         << "3-注销  " << std::endl
+        << "4-修改用户名  " << std::endl
+        << "5-修改密码  " << std::endl
         << "其他键以退出  " <<std::endl
         << "请输入您想执行的操作: " ;
     std::cin >> index;
@@ -43,6 +47,14 @@ int main() {
         if(log_Logout()) {
           flag = 0;
         }
+        break;
+      }
+      case 4: {
+        change_UserName();
+        break;
+      }
+      case 5: {
+        change_Passwd();
         break;
       }
       default: {
@@ -128,5 +140,39 @@ bool log_Logout() {
 
     return true;
   }
+  LogManager::logUserActivity(username,"注销","失败");
+  return false;
+}
+
+//修改用户名或密码
+bool change_UserName() {
+  std::string username, password;
+  std::cout << "请输入你需要修改的用户名: " ;
+  std::cin >> username;
+  std::cout << "请输入你需要修改用户名的账户密码: " ;
+  std::cin >> password; 
+
+  if(my.my_ChangeUserName(username, password)) {
+    std::cout << "修改用户名成功！ " << std::endl;
+    LogManager::logUserActivity(username,"修改用户名","成功");
+    return true;
+  }
+  LogManager::logUserActivity(username,"修改用户名","失败");
+  return false;
+}
+
+bool change_Passwd() {
+  std::string username, password;
+  std::cout << "请输入你需要修改密码的用户名: " ;
+  std::cin >> username;
+  std::cout << "请输入你需要修改的账户密码: " ;
+  std::cin >> password; 
+
+  if(my.my_ChangePasswd(username, password)) {
+    std::cout << "修改密码成功！ " << std::endl;
+    LogManager::logUserActivity(username,"修改密码","成功");
+    return true;
+  }
+  LogManager::logUserActivity(username,"修改密码","失败");
   return false;
 }

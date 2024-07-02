@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: zy
  * @Date: 2024-07-02 09:28:02
- * @LastEditTime: 2024-07-02 11:01:18
+ * @LastEditTime: 2024-07-02 14:28:57
  * @LastEditors: zy
  */
 #include <spdlog/spdlog.h>
@@ -26,6 +26,7 @@ class LogManager {
       auto logger = spdlog::basic_logger_mt("zy_logger","log_register_server.log");
       spdlog::set_default_logger(logger);
       spdlog::set_pattern("[%Y-%m-%d %H:%M:%S][%l]%v");
+      spdlog::flush_every(std::chrono::seconds(5));// 定期为所有注册的logger隔5秒刷新
       
     }catch(const spdlog::spdlog_ex& ex) {
       std::cerr << "日志系统初始化失败 " << ex.what() << std::endl;

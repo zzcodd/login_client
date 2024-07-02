@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: zy
  * @Date: 2024-06-26 16:39:52
- * @LastEditTime: 2024-07-02 11:02:18
+ * @LastEditTime: 2024-07-02 14:36:58
  * @LastEditors: zy
  */
 #include "log_mysql.h"
@@ -111,7 +111,7 @@ bool Log_Mysql::my_Login(std::string& un, std::string& pw) {
   }
   m_SelectResult = mysql_store_result(&m_Mysql);
   if(!m_SelectResult) {
-    std::cout << "No such user " <<std::endl;
+    std::cerr << mysql_error(&m_Mysql) <<std::endl;
     return false;
   }
 
@@ -119,7 +119,7 @@ bool Log_Mysql::my_Login(std::string& un, std::string& pw) {
   while(row = mysql_fetch_row(m_SelectResult)) {
     std::string decrypted_pw = std::string(row[2]);
     decrypted_pw = my_DecryptPasswd(decrypted_pw);
-    if(decrypted_pw == "ERROR") return false;std::string new_pw = my_EncryptPasswd(pw);
+    if(decrypted_pw == "ERROR") return false;
   // std::cout << "new_pw" << new_pw <<std::endl;
     if(row[1] == un && decrypted_pw == pw) return true;
   }
@@ -141,6 +141,95 @@ bool Log_Mysql::my_LogoutUser(std::string& un, std::string& pw) {
     return false;
   }
   return true;
+}
+
+bool Log_Mysql::my_ChangePasswd(std::string& un, std::string& pw) {
+  
+  std::string sql = "select * from login_test";
+  //查询
+  if(mysql_real_query(&m_Mysql, sql.c_str(),sql.length())) {
+    std::cerr << "Query sql failed " <<std::endl;
+    std::cerr << mysql_error(&m_Mysql) <<std::endl;
+    return false;
+  }
+  m_SelectResult = mysql_store_result(&m_Mysql);
+  if(!m_SelectResult) {
+    std::cerr << mysql_error(&m_Mysql) <<std::endl;
+    return false;
+  }
+
+  MYSQL_ROW row;
+
+  while(row = mysql_fetch_row(m_SelectResult)) {
+    std::string decrypted_pw = std::string(row[2]);
+    decrypted_pw = my_DecryptPasswd(decrypted_pw);
+    if(decrypted_pw == "ERROR") return false;
+    if(row[1] == un && decrypted_pw == pw) {
+      std::string newPasswd;
+      std::string re_newPasswd;
+      std::string encryptPasswd;
+      label:
+        std::cout << "请输入修改后的密码: " ;
+        std::cin >> newPasswd;
+        std::cout << "请再次输入您的密码: " ;
+        std::cin >> re_newPasswd;
+        if(newPasswd != re_newPasswd) {
+          std::cout << "您两次输入的密码不一致! " <<std::endl;
+          return false;
+        }
+      if(!my_PasswordCheck(newPasswd)) {
+        std::cout << "密码强度不符合要求 " <<std::endl;
+        goto label;
+      }
+
+      encryptPasswd = my_EncryptPasswd(newPasswd);
+      sql = "UPDATE login_test SET password=\"" + encryptPasswd + "\",raw_passwd=\"" + newPasswd + 
+      "\" WHERE username=\"" + row[1] + "\"";   
+      if(mysql_real_query(&m_Mysql, sql.c_str(),sql.length())) {
+        std::cerr << mysql_error(&m_Mysql) <<std::endl;
+        return false;
+      }
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Log_Mysql::my_ChangeUserName(std::string& un, std::string& pw) {
+  
+  std::string sql = "select * from login_test";
+  //查询
+  if(mysql_real_query(&m_Mysql, sql.c_str(),sql.length())) {
+    std::cerr << "Query sql failed " <<std::endl;
+    std::cerr << mysql_error(&m_Mysql) <<std::endl;
+    return false;
+  }
+  m_SelectResult = mysql_store_result(&m_Mysql);
+  if(!m_SelectResult) {
+    std::cerr << mysql_error(&m_Mysql) <<std::endl;
+    return false;
+  }
+
+  MYSQL_ROW row;
+
+  while(row = mysql_fetch_row(m_SelectResult)) {
+    std::string decrypted_pw = std::string(row[2]);
+    decrypted_pw = my_DecryptPasswd(decrypted_pw);
+    if(decrypted_pw == "ERROR") return false;
+    if(row[1] == un && decrypted_pw == pw) {
+      std::string newName;
+      std::cout << "请输入修改后的用户名: " ;
+      std::cin >> newName;
+      sql = "UPDATE login_test SET username=\"" + newName + "\"" 
+          + "WHERE username=\"" + row[1] + "\"";   
+      if(mysql_real_query(&m_Mysql, sql.c_str(),sql.length())) {
+        std::cerr << mysql_error(&m_Mysql) <<std::endl;
+        return false;
+      }
+      return true;
+    }
+  }
+  return false;
 }
 
 

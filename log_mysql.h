@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: zy
  * @Date: 2024-06-26 15:34:50
- * @LastEditTime: 2024-06-28 16:17:39
+ * @LastEditTime: 2024-07-02 14:20:36
  * @LastEditors: zy
  */
 #ifndef _LOG_MYSQL_H_
@@ -45,7 +45,6 @@ class Log_Mysql
  public:
   //密码强度检验
   bool my_PasswordCheck(std::string& pw);
-  //密码加密
 
  private:
   int m_password_level = 1; //[0 1:长度要大于8 2：大小写字母特殊符号三占二]
@@ -57,6 +56,10 @@ class Log_Mysql
   bool my_Login(std::string& un, std::string& pw);
   //注销用户
   bool my_LogoutUser(std::string& un, std::string& pw);
+  //修改密码
+  bool my_ChangePasswd(std::string& un, std::string& pw);
+  //修改用户名
+  bool my_ChangeUserName(std::string& un, std::string& pw);
 
 public:
   //密码加密
