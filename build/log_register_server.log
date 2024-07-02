@@ -1,0 +1,6 @@
+[2024-07-02 10:56:00][info]UserId: zz | Activity: 登录 | status: 失败 | IP: 127.0.0.1
+[2024-07-02 10:56:51][info]UserId: liu | Activity: 登录 | status: 成功 | IP: 127.0.0.1
+[2024-07-02 10:57:34][warning]Event:注销用户 | UserId:gggg | IP:127.0.0.1
+[2024-07-02 10:57:34][info]UserId: gggg | Activity: 注销 | status: 成功 | IP: 127.0.0.1
+[2024-07-02 11:03:07][warning]UserId:注销用户 | Activity:zz | IP:127.0.0.1
+[2024-07-02 11:03:07][info]UserId: zz | Activity: 注销 | status: 成功 | IP: 127.0.0.1

@@ -1,0 +1,3 @@
+/home/cidi/vscodeWorkspace/temp/wb_password_test/passwd_mysql/build/CMakeFiles/myLoginClient.dir
+/home/cidi/vscodeWorkspace/temp/wb_password_test/passwd_mysql/build/CMakeFiles/edit_cache.dir
+/home/cidi/vscodeWorkspace/temp/wb_password_test/passwd_mysql/build/CMakeFiles/rebuild_cache.dir
